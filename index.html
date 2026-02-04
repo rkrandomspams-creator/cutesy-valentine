@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gayathriii 💜</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #7f53ac, #647dee);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bg-text {
+    position: absolute;
+    bottom: 100px;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.6);
+    font-style: italic;
+    user-select: none;
+  }
+
+  .container {
+    text-align: center;
+    background: rgba(255,255,255,0.9);
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    position: relative;
+    width: 320px;
+    height: 320px;
+    z-index: 1;
+  }
+
+  h1 {
+    color: #7f53ac;
+    font-size: 32px;
+    margin-bottom: 5px;
+  }
+
+  h2 {
+    color: #555;
+    margin-bottom: 25px;
+  }
+
+  button {
+    padding: 12px 28px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+
+  #yes {
+    background: linear-gradient(135deg, #7f53ac, #647dee);
+    color: white;
+    box-shadow: 0 10px 20px rgba(127,83,172,0.5);
+  }
+
+  #yes:hover {
+    transform: scale(1.08);
+  }
+
+  #no {
+    background: #d1c4e9;
+    color: #4a148c;
+    position: absolute;
+    left: 50%;
+    top: 65%;
+    transform: translate(-50%, -50%);
+  }
+
+  img {
+    display: none;
+    margin-top: 20px;
+    max-width: 240px;
+    border-radius: 20px;
+    box-shadow: 0 0 35px rgba(127,83,172,0.8);
+  }
+
+  .message {
+    display: none;
+    font-size: 22px;
+    color: #7f53ac;
+    margin-top: 10px;
+  }
+
+  .heart {
+    position: fixed;
+    top: -10px;
+    font-size: 20px;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh);
+      opacity: 0;
+    }
+  }
+
+  /* ===== MODAL ===== */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+
+  .modal.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-box {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 20px;
+    text-align: center;
+    color: #7f53ac;
+    font-size: 18px;
+    box-shadow: 0 20px 40px rgba(127,83,172,0.4);
+    animation: pop 0.3s ease;
+  }
+
+  @keyframes pop {
+    from { transform: scale(0.8); }
+    to { transform: scale(1); }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="container">
+  <h2>Letter to Gayathriii 💜</h2>
+  <h2>Will you be my Valentine?</h2>
+
+  <button id="yes">YES 🎀</button>
+  <button id="no">NO 🙄</button>
+
+  <img id="photo" src="your-photo.jpg">
+  <div class="message">Good girl 😏💜</div>
+</div>
+
+<div class="bg-text">(because my pookie loves purple)</div>
+
+<audio id="music" src="romantic.mp3"></audio>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box" id="modalText">Nice try 😌</div>
+</div>
+
+<script>
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const container = document.getElementById("container");
+  const photo = document.getElementById("photo");
+  const msg = document.querySelector(".message");
+  const music = document.getElementById("music");
+
+  const modal = document.getElementById("modal");
+  const modalText = document.getElementById("modalText");
+
+  const cuteMessages = [
+    "Enit Enit??",
+    "Ayyada! 😏",
+  ];
+
+  let noClickCount = 0;
+  let tries = 0;
+  const maxTries = 10000;
+  const moveDistance = 120;
+
+  function showModal(text) {
+    modalText.innerText = text;
+    modal.classList.add("show");
+
+    setTimeout(() => {
+      modal.classList.remove("show");
+    }, 1500);
+  }
+
+  container.addEventListener("mousemove", (e) => {
+    const btnRect = noBtn.getBoundingClientRect();
+    const contRect = container.getBoundingClientRect();
+
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    const btnX = btnRect.left + btnRect.width / 2;
+    const btnY = btnRect.top + btnRect.height / 2;
+
+    const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+
+    if (distance < 70 && tries < maxTries) {
+      tries++;
+
+      const angle = Math.atan2(btnY - mouseY, btnX - mouseX);
+
+      let newLeft =
+        btnRect.left + Math.cos(angle) * moveDistance - contRect.left;
+      let newTop =
+        btnRect.top + Math.sin(angle) * moveDistance - contRect.top;
+
+      newLeft = Math.max(10, Math.min(container.clientWidth - btnRect.width - 10, newLeft));
+      newTop = Math.max(10, Math.min(container.clientHeight - btnRect.height - 10, newTop));
+
+      noBtn.style.left = newLeft + "px";
+      noBtn.style.top = newTop + "px";
+      noBtn.style.transform = "none";
+    }
+  });
+  container.addEventListener("touchstart", (e) => {
+  const touch = e.touches[0];
+  const btnRect = noBtn.getBoundingClientRect();
+  const contRect = container.getBoundingClientRect();
+
+  const btnX = btnRect.left + btnRect.width / 2;
+  const btnY = btnRect.top + btnRect.height / 2;
+
+  const angle = Math.atan2(btnY - touch.clientY, btnX - touch.clientX);
+
+  let newLeft =
+    btnRect.left + Math.cos(angle) * moveDistance - contRect.left;
+  let newTop =
+    btnRect.top + Math.sin(angle) * moveDistance - contRect.top;
+
+  newLeft = Math.max(10, Math.min(container.clientWidth - btnRect.width - 10, newLeft));
+  newTop = Math.max(10, Math.min(container.clientHeight - btnRect.height - 10, newTop));
+
+  noBtn.style.left = newLeft + "px";
+  noBtn.style.top = newTop + "px";
+  noBtn.style.transform = "none";
+});
+
+
+  noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    noClickCount++;
+
+    if (noClickCount === 1 || noClickCount === 3) {
+      showModal(cuteMessages[Math.floor(Math.random() * cuteMessages.length)]);
+    }
+  });
+
+  yesBtn.addEventListener("click", () => {
+    music.play();
+    photo.style.display = "block";
+    msg.style.display = "block";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    startHearts();
+  });
+
+  function startHearts() {
+    for (let i = 0; i < 40; i++) createHeart();
+  }
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💜";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }
+</script>
+
+</body>
+</html>
